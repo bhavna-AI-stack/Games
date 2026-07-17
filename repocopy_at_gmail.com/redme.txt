@@ -1,0 +1,12 @@
+unzip repo-copy-deploy-npm.zip
+cd npm-clone
+cp .env.example .env       # add your GitHub + Vercel tokens
+npm install
+npm run dev                # frontend: localhost:3000 · API: localhost:3001
+
+
+npm-clone/
+├── package.json          ← root with npm workspaces + concurrently
+├── .env.example          ← copy to .env, fill your tokens
+├── client/               ← React + Vite frontend (plain JSX, no build step needed to read)
+└── server/               ← Express backend (plain JS, no TypeScript compile step)
