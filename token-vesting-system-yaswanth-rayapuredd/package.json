@@ -1,0 +1,29 @@
+{
+  "name": "token-vesting-dapp",
+  "version": "1.0.0",
+  "description": "A production-ready Token Vesting DApp - B.Tech Final Year Project",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:scai": "hardhat run scripts/deploy.ts --network scai",
+    "node": "hardhat node",
+    "clean": "hardhat clean",
+    "frontend": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build"
+  },
+  "keywords": ["blockchain", "vesting", "defi", "solidity", "hardhat"],
+  "author": "Token Vesting DApp Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "hardhat": "^2.22.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^16.0.0"
+  }
+}
