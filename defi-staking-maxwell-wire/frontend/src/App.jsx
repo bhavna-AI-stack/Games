@@ -1,0 +1,129 @@
+import "./App.css";
+
+import WalletButton from "./components/WalletButton";
+import StakingCard from "./components/StakingCard";
+import RewardsCard from "./components/RewardsCard";
+import StatsCard from "./components/StatsCard";
+
+import { useWallet } from "./hooks/useWallet";
+import { useStaking } from "./hooks/useStaking";
+
+import { CONTRACTS } from "./contracts/config";
+import etherAuthorityLogo from "./assets/etherauthority-logo.png";
+
+function App() {
+  const wallet = useWallet();
+
+  const staking = useStaking(wallet.provider, wallet.account);
+
+  return (
+    <main className="app">
+      <header className="navbar">
+        <div>
+          <h1>StakeVault</h1>
+          <span>DeFi Staking Protocol</span>
+        </div>
+
+        <WalletButton
+          account={wallet.account}
+          isConnected={wallet.isConnected}
+          isConnecting={wallet.isConnecting}
+          connectors={wallet.connectors}
+          onConnect={wallet.connectWallet}
+          onDisconnect={wallet.disconnectWallet}
+        />
+      </header>
+
+      {wallet.error && <div className="error">{wallet.error}</div>}
+
+      {staking.error && <div className="error">{staking.error}</div>}
+
+      {!wallet.isConnected ? (
+        <section className="welcome">
+          <h1>Put Your Assets to Work</h1>
+          <p>
+            Stake tokens, earn rewards, and manage your position from one simple
+            DeFi dashboard.
+          </p>
+        </section>
+      ) : (
+        <>
+          <StatsCard
+            totalStaked={staking.totalStaked}
+            rewardRate={staking.rewardRate}
+            rewardRemaining={staking.rewardRemaining}
+          />
+
+          <section className="dashboard">
+            <StakingCard
+              stakeBalance={staking.stakeBalance}
+              stakedAmount={staking.stakedAmount}
+              onStake={staking.stakeWithApproval}
+              onWithdraw={staking.withdraw}
+              loading={staking.loading}
+            />
+
+            <RewardsCard
+              rewardBalance={staking.rewardBalance}
+              earnedRewards={staking.earnedRewards}
+              onClaim={staking.claimRewards}
+              onExit={staking.exit}
+              loading={staking.loading}
+            />
+          </section>
+        </>
+      )}
+
+      <footer className="site-footer">
+        <div className="footer-brand">
+          <strong>StakeVault</strong>
+          <span>DeFi Staking Protocol</span>
+        </div>
+
+        <div className="contract-addresses">
+          <span className="footer-heading">Contracts</span>
+
+          <a
+            href={`https://sepolia.etherscan.io/address/${CONTRACTS.stakeToken}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            StakeToken ↗
+          </a>
+
+          <a
+            href={`https://sepolia.etherscan.io/address/${CONTRACTS.rewardToken}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            RewardToken ↗
+          </a>
+
+          <a
+            href={`https://sepolia.etherscan.io/address/${CONTRACTS.stakingVault}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            StakingVault ↗
+          </a>
+        </div>
+
+        <div className="footer-credit">
+          <span>Built by Maxwell Wire</span>
+
+          <div className="organization">
+            <img
+              src={etherAuthorityLogo}
+              alt="EtherAuthority"
+              className="etherauthority-logo"
+            />
+
+            <span>EtherAuthority</span>
+          </div>
+        </div>
+      </footer>
+    </main>
+  );
+}
+
+export default App;
